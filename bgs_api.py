@@ -2,7 +2,7 @@ import requests
 import json
 
 def get_system_data():
-    url = f"https://elitebgs.app/api/ebgs/v5/systems?name=Lulus&factionDetails=true"
+    url = "https://elitebgs.app/api/ebgs/v5/systems?name=Lulus&factionDetails=true"
     response = requests.get(url)
 
     if response.status_code == 200:
@@ -13,4 +13,4 @@ def get_system_data():
     
 system_details = {}
 details = get_system_data()
-print(f"{details}")
+print(json.dumps(details, sort_keys=True, indent=4))
