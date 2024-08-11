@@ -1,10 +1,11 @@
 import get_last_tick as tick
-import system_list as syslist
+#import system_list as syslist
 import requests
 import json
 from datetime import datetime
 
-system_list = ["Grudii"]
+system_list = ["Lanaest","Bildeptu"]
+
 
 def get_system_data(name):
     url = "https://elitebgs.app/api/ebgs/v5/systems?name=" + name
@@ -33,17 +34,37 @@ def get_system_data(name):
             + ".txt"
         )
 
-        last_update = tick.convert_tz(json_data["docs"][0]["updated_at"])
+
+        try:
+            last_update = tick.convert_tz(json_data["docs"][0]["updated_at"])
+        except Exception as e:
+            with open("error.txt", "a") as errorfile:
+                errorfile.write("Data for system " + name + f" either isn't present or has some other issue. {e}")
+                errorfile.write(
+                "Load failed for "
+                + name + " "
+                + cur_mon
+                + "_"
+                + cur_day
+                + "_"
+                + cur_hour
+                + cur_min
+            )
+            
+        
         current = last_update >= last_tick
 
-        with open(fname, "a") as output:
-            output.write("Last Update: " + last_update + "\n")
-            output.write("Current: " + str(current) + "\n")
+        sys_dict = {'Last Update':last_update,
+                    'Current':current}
+
+        with open(fname, "w") as output:
+            for key, value in sys_dict.items():
+                output.write('%s:%s\n' % (key, value))
 
     else:
         with open("error.txt", "a") as errorfile:
             errorfile.write(
-                "Load failed for "
+                "JSON Load failed for "
                 + name
                 + cur_mon
                 + "_"
@@ -55,4 +76,9 @@ def get_system_data(name):
 
 
 for system in system_list:
-    get_system_data(system)
+    try:
+        get_system_data(system)
+    except Exception:
+        print("Errors occurred, see error log for details.")
+        continue
+
