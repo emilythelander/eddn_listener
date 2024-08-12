@@ -1,6 +1,6 @@
 import get_json_data as gjd
 import parse_system_data as psd
-#import system_list as syslist
+# import system_list as syslist
 
 system_list = ["Bildeptu"]
 
@@ -11,4 +11,3 @@ for system in system_list:
     except Exception as e:
         print(f"Errors occurred, see error log for details. {e}")
         continue
-

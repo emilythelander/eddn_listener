@@ -5,7 +5,11 @@ import time_functions as tf
 
 
 def get_system_data(sys_name):
-    url = "https://elitebgs.app/api/ebgs/v5/systems?name=" + sys_name + "&factionDetails=true"
+    url = (
+        "https://elitebgs.app/api/ebgs/v5/systems?name="
+        + sys_name
+        + "&factionDetails=true"
+    )
     res = requests.get(url)
 
     if res.status_code == 200:
@@ -13,7 +17,10 @@ def get_system_data(sys_name):
         return json_dict
     else:
         write_error("get_system_data request failed for non-200 status. Info: ")
-        print("Request status code other than 200 received, check error file for more details.")
+        print(
+            "Request status code other than 200 received, check error file for more details."
+        )
+
 
 def get_last_tick():
     url = "https://elitebgs.app/api/ebgs/v5/ticks"
@@ -26,18 +33,21 @@ def get_last_tick():
         return last_tick
     else:
         write_error("get_last_tick request failed for non-200 status. Info: ")
-        print("Request status code other than 200 received, check error file for more details.")
+        print(
+            "Request status code other than 200 received, check error file for more details."
+        )
+
 
 def write_error(message):
     with open("error.txt", "a") as errorfile:
-            cur_time = datetime.now()
-            errorfile.write(
-                message
-                + " "
-                + cur_time.strftime("%m")
-                + "_"
-                + cur_time.strftime("%d")
-                + "_"
-                + cur_time.strftime("%H")
-                + cur_time.strftime("%M")
-            )
+        cur_time = datetime.now()
+        errorfile.write(
+            message
+            + " "
+            + cur_time.strftime("%m")
+            + "_"
+            + cur_time.strftime("%d")
+            + "_"
+            + cur_time.strftime("%H")
+            + cur_time.strftime("%M")
+        )
