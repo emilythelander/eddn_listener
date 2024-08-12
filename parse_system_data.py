@@ -27,22 +27,24 @@ def parse_system_data(json_dict):
 
     #Compare update date with last tick to see if the data is current or not
     last_tick = gjd.get_last_tick()
-    last_update = json_dict["docs"][0]["updated_at"]
+    last_update = tf.convert_tz(json_dict["docs"][0]["updated_at"])
     current = last_update > last_tick
     final_dict.update({"Current": current})
 
-    #Get other basic information we'll always want
-    allegiance = json_dict["docs"][0]["allegiance"]
-    cmf = json_dict["docs"][0]["controlling_minor_faction_cased"]
-        
-
-
+    #Get other basic system information we'll always want
+    final_dict.update({"Allegiance": json_dict["docs"][0]["allegiance"]})
+    final_dict.update({"Government": json_dict["docs"][0]["government"]})
+    final_dict.update({"Population": json_dict["docs"][0]["population"]})
+    final_dict.update({"Primary Economy": json_dict["docs"][0]["primary_economy"]})
+    final_dict.update({"Secondary Economy": json_dict["docs"][0]["secondary_economy"]})
+    final_dict.update({"Security": json_dict["docs"][0]["security"]})
+    final_dict.update({"System State": json_dict["docs"][0]["state"]})
     
-    # Outputs dictionary data to file
+    # Outputs final system data dictionary to file
     fpath = r"data/"
     fname = (fpath + sys_name 
              + "_"
-             + tf.time_fname_output)
+             + tf.time_fname_output())
     with open(fname, "w") as output:
         for key, value in final_dict.items():
             output.write('%s:%s\n' % (key, value))
