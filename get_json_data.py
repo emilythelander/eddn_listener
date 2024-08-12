@@ -24,10 +24,10 @@ def get_system_data(sys_name):
 
 def get_last_tick():
     url = "https://elitebgs.app/api/ebgs/v5/ticks"
-    response = requests.get(url)
+    res = requests.get(url)
 
-    if response.status_code == 200:
-        json_data = json.loads(response.text)
+    if res.status_code == 200:
+        json_data = json.loads(res.text)
         last_tick = json_data[0]["time"]
         last_tick = tf.convert_tz(last_tick)
         return last_tick
