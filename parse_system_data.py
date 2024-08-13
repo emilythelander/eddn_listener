@@ -32,9 +32,8 @@ def parse_system_data(json_dict):
     final_dict = {"Name": sys_name}
 
     # Compare update date with last tick to see if the data is current or not
-    last_tick = gjd.get_last_tick()
     last_update = tf.convert_tz(json_dict["docs"][0]["updated_at"])
-    current = last_update > last_tick
+    current = tf.is_current(last_update)
     final_dict.update({"Current": current})
 
     # Get other basic system information we'll always want

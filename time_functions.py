@@ -1,3 +1,4 @@
+import get_json_data as gjd
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
@@ -5,10 +6,12 @@ utc = ZoneInfo("UTC")
 local_tz = ZoneInfo("America/Boise")
 
 
-# takes input type string, returns type datetime
+# returns type datetime
 def convert_tz(dt):
-    td_dt = datetime.strptime(dt, "%Y-%m-%dT%H:%M:%S.%fZ")
-    td_local = td_dt.replace(tzinfo=ZoneInfo("UTC")).astimezone(
+    if type(dt) is str:
+        dt_dt = datetime.strptime(dt, "%Y-%m-%dT%H:%M:%S.%fZ")
+
+    td_local = dt_dt.replace(tzinfo=ZoneInfo("UTC")).astimezone(
         ZoneInfo("America/Boise")
     )
     return td_local
@@ -28,3 +31,9 @@ def time_fname_output():
     cur_min = cur_time.strftime("%M")
     fname = cur_mon + "_" + cur_day + "_" + cur_hour + cur_min + ".txt"
     return fname
+
+
+def is_current(dt):
+    tick = convert_tz(gjd.get_last_tick())
+    current = dt >= tick
+    return current
