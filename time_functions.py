@@ -9,9 +9,9 @@ local_tz = ZoneInfo("America/Boise")
 # returns type datetime
 def convert_tz(dt):
     if type(dt) is str:
-        dt_dt = datetime.strptime(dt, "%Y-%m-%dT%H:%M:%S.%fZ")
+        dt = datetime.strptime(dt, "%Y-%m-%dT%H:%M:%S.%fZ")
 
-    td_local = dt_dt.replace(tzinfo=ZoneInfo("UTC")).astimezone(
+    td_local = dt.replace(tzinfo=ZoneInfo("UTC")).astimezone(
         ZoneInfo("America/Boise")
     )
     return td_local

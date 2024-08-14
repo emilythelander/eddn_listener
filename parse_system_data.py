@@ -45,6 +45,18 @@ def parse_system_data(json_dict):
     final_dict.update({"Security": json_dict["docs"][0]["security"]})
     final_dict.update({"System State": json_dict["docs"][0]["state"]})
 
+    #Cycle through system factions, create new dictionary for faction data, sort by inf desc
+    uns_fac_dict = {}
+    for doc in json_dict["docs"]:
+        for faction in doc["factions"]:
+            fac_name = faction.get("name")
+            fac_inf = faction["faction_details"]["faction_presence"]["influence"]
+            uns_fac_dict.update({fac_name: fac_inf})
+    
+    sor_fac_dict = sorted(uns_fac_dict.items(), key = lambda x:x[1], reverse=True)
+    print(sor_fac_dict)
+
+
     # Outputs final system data dictionary to file
     fpath = r"data/"
     fname = fpath + sys_name + "_" + tf.time_fname_output()
