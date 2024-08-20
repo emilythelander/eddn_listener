@@ -56,9 +56,9 @@ def parse_system_data(json_dict):
             fac_inf = faction["faction_details"]["faction_presence"]["influence"]
             uns_fac_inf_dict.update({fac_name: fac_inf})
 
-    sor_fac_inf_dict = sorted(uns_fac_inf_dict.items(), key=lambda x: x[1], reverse=True)
-
-
+    sor_fac_inf_dict = sorted(
+        uns_fac_inf_dict.items(), key=lambda x: x[1], reverse=True
+    )
 
     # Outputs final system data dictionary to file
     fpath = r"data/"
