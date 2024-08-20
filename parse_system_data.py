@@ -13,19 +13,16 @@ def parse_system_data(json_dict):
         )
         return -1
 
-    """
-    Gets the system name and creates the initial dictionary to be used for output later on.
-    If the system name doesn't exist in the json file, we know that either it's a dead system
-    (i.e. Lanaest) or something is funky with the data and we can't continue.
-    """
+    # Gets the system name and creates the initial dictionary to be used for output later on.
+    # If the system name doesn't exist in the json file, we know that either it's a dead system
+    # (i.e. Lanaest) or something is funky with the data and we can't continue.
+
     try:
         sys_name = json_dict["docs"][0]["name"]
     except Exception as e:
         with open("error.txt", "a") as errorfile:
             errorfile.write(
-                "Data for system "
-                + sys_name
-                + f" either isn't present or has some other issue. {e}"
+                "Data for system " f" either isn't present or has some other issue. {e}"
             )
         return -1
 
@@ -45,17 +42,16 @@ def parse_system_data(json_dict):
     final_dict.update({"Security": json_dict["docs"][0]["security"]})
     final_dict.update({"System State": json_dict["docs"][0]["state"]})
 
-    #Cycle through system factions, create new dictionary for faction data, sort by inf desc
+    # Cycle through system factions, create new dictionary for faction data, sort by inf desc
     uns_fac_dict = {}
     for doc in json_dict["docs"]:
         for faction in doc["factions"]:
             fac_name = faction.get("name")
             fac_inf = faction["faction_details"]["faction_presence"]["influence"]
             uns_fac_dict.update({fac_name: fac_inf})
-    
-    sor_fac_dict = sorted(uns_fac_dict.items(), key = lambda x:x[1], reverse=True)
-    print(sor_fac_dict)
 
+    sor_fac_dict = sorted(uns_fac_dict.items(), key=lambda x: x[1], reverse=True)
+    print(sor_fac_dict)
 
     # Outputs final system data dictionary to file
     fpath = r"data/"
