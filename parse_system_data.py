@@ -34,28 +34,35 @@ def parse_system_data(json_dict):
     final_dict.update({"Current": current})
 
     # Get other basic system information we'll always want
-    final_dict.update({"Allegiance": json_dict["docs"][0]["allegiance"]})
-    final_dict.update({"Government": json_dict["docs"][0]["government"]})
+    allegiance = (json_dict["docs"][0]["allegiance"]).capitalize()
+    final_dict.update({"Allegiance": allegiance})
+    government = ((json_dict["docs"][0]["government"])[12:-1]).capitalize()
+    final_dict.update({"Government": government})
     final_dict.update({"Population": json_dict["docs"][0]["population"]})
-    final_dict.update({"Primary Economy": json_dict["docs"][0]["primary_economy"]})
-    final_dict.update({"Secondary Economy": json_dict["docs"][0]["secondary_economy"]})
-    final_dict.update({"Security": json_dict["docs"][0]["security"]})
-    final_dict.update({"System State": json_dict["docs"][0]["state"]})
+    prim_eco = ((json_dict["docs"][0]["primary_economy"])[9:-1]).capitalize()
+    final_dict.update({"Primary Economy": prim_eco})
+    sec_eco = ((json_dict["docs"][0]["secondary_economy"])[9:-1]).capitalize()
+    final_dict.update({"Secondary Economy": sec_eco})
+    security = ((json_dict["docs"][0]["security"])[17:-1]).capitalize()
+    final_dict.update({"Security": security})
+    state = (json_dict["docs"][0]["state"]).capitalize()
+    final_dict.update({"System State": state})
 
-    # Cycle through system factions, create new dictionary for faction data, sort by inf desc
-    uns_fac_dict = {}
+    # Cycle through system factions, create new dictionary for faction influence data, sort by inf desc
+    uns_fac_inf_dict = {}
     for doc in json_dict["docs"]:
         for faction in doc["factions"]:
             fac_name = faction.get("name")
             fac_inf = faction["faction_details"]["faction_presence"]["influence"]
-            uns_fac_dict.update({fac_name: fac_inf})
+            uns_fac_inf_dict.update({fac_name: fac_inf})
 
-    sor_fac_dict = sorted(uns_fac_dict.items(), key=lambda x: x[1], reverse=True)
-    print(sor_fac_dict)
+    sor_fac_inf_dict = sorted(uns_fac_inf_dict.items(), key=lambda x: x[1], reverse=True)
+
+
 
     # Outputs final system data dictionary to file
     fpath = r"data/"
     fname = fpath + sys_name + "_" + tf.time_fname_output()
     with open(fname, "w") as output:
         for key, value in final_dict.items():
-            output.write("%s:%s\n" % (key, value))
+            output.write("%s: %s\n" % (key, value))
