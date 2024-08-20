@@ -60,9 +60,14 @@ def parse_system_data(json_dict):
         uns_fac_inf_dict.items(), key=lambda x: x[1], reverse=True
     )
 
+    sor_fac_inf_dict = dict(sor_fac_inf_dict)
+
     # Outputs final system data dictionary to file
     fpath = r"data/"
     fname = fpath + sys_name + "_" + tf.time_fname_output()
     with open(fname, "w") as output:
         for key, value in final_dict.items():
-            output.write("%s: %s\n" % (key, value))
+            output.write(f"{key}: {value}\n")
+        output.write("\n")
+        for key, value in sor_fac_inf_dict.items():
+            output.write(f"{key}: {value}\n")
