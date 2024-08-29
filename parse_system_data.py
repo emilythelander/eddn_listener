@@ -82,18 +82,62 @@ def parse_system_data(json_dict):
             fac_happiness = faction["faction_details"]["faction_presence"]["happiness"]
             fac_happiness = h.get_faction_happiness(fac_happiness)
             faction_dict.update({"Happiness": fac_happiness})
+
+            fac_act_states = faction["faction_details"]["faction_presence"][
+                "active_states"
+            ]
+            c_str = ""
+            for value in fac_act_states:
+                state_fmt = h.get_faction_states(value["state"])
+                c_str = c_str + f"{state_fmt}, "
+            if c_str == "":
+                c_str = "None"
+            else:
+                c_str = c_str[:-2]
+            faction_dict.update({"Active States": c_str})
+            final_fac_dict.update({fac_name: faction_dict})
+
+            fac_pen_states = faction["faction_details"]["faction_presence"][
+                "pending_states"
+            ]
+            c_str = ""
+            for value in fac_pen_states:
+                state_fmt = h.get_faction_states(value["state"])
+                c_str = c_str + f"{state_fmt}, "
+            if c_str == "":
+                c_str = "None"
+            else:
+                c_str = c_str[:-2]
+            faction_dict.update({"Pending States": c_str})
+            final_fac_dict.update({fac_name: faction_dict})
+
+            fac_rec_states = faction["faction_details"]["faction_presence"][
+                "recovering_states"
+            ]
+            c_str = ""
+            for value in fac_rec_states:
+                state_fmt = h.get_faction_states(value["state"])
+                c_str = c_str + f"{state_fmt}, "
+            if c_str == "":
+                c_str = "None"
+            else:
+                c_str = c_str[:-2]
+            faction_dict.update({"Recovering States": c_str})
             final_fac_dict.update({fac_name: faction_dict})
 
     # Outputs final system data dictionary to file
     fpath = r"data/"
     fname = fpath + sys_name + "_" + tf.time_fname_output()
     with open(fname, "w") as output:
+        output.write("[General System Info]\n")
         for key, value in final_dict.items():
             output.write(f"{key}: {value}\n")
-        output.write("\n")
+        output.write("\n\n")
+        output.write("[Faction Influence List]\n")
         for key, value in sor_fac_inf_dict.items():
             output.write(f"{key}: {value:.2f}\n")
-        output.write("\n")
+        output.write("\n\n")
+        output.write("[Detailed Faction Information]\n")
         for key, value in final_fac_dict.items():
             output.write(f"{key}\n")
             for y in value:
@@ -101,3 +145,4 @@ def parse_system_data(json_dict):
                 val = value[y]
                 output.write(f"{val}\n")
             output.write("\n")
+        output.write("\n\n")
