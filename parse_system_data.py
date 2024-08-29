@@ -1,5 +1,6 @@
 import get_json_data as gjd
 import time_functions as tf
+import helpers as h
 
 
 # Takes dictionary as input
@@ -54,6 +55,7 @@ def parse_system_data(json_dict):
         for faction in doc["factions"]:
             fac_name = faction.get("name")
             fac_inf = faction["faction_details"]["faction_presence"]["influence"]
+            fac_inf = fac_inf * 100
             uns_fac_inf_dict.update({fac_name: fac_inf})
 
     sor_fac_inf_dict = sorted(
@@ -61,6 +63,26 @@ def parse_system_data(json_dict):
     )
 
     sor_fac_inf_dict = dict(sor_fac_inf_dict)
+
+    # Get other faction info
+    final_fac_dict = {}
+    for doc in json_dict["docs"]:
+        for faction in doc["factions"]:
+            faction_dict = {}
+            fac_name = faction.get("name")
+            fac_inf = (
+                faction["faction_details"]["faction_presence"]["influence"]
+            ) * 100
+            fac_inf = f"{fac_inf:.2f}"
+            faction_dict.update({"Influence": fac_inf})
+            fac_gov = (faction["faction_details"]["government"]).capitalize()
+            faction_dict.update({"Government": fac_gov})
+            fac_alleg = (faction["faction_details"]["allegiance"]).capitalize()
+            faction_dict.update({"Allegiance": fac_alleg})
+            fac_happiness = faction["faction_details"]["faction_presence"]["happiness"]
+            fac_happiness = h.get_faction_happiness(fac_happiness)
+            faction_dict.update({"Happiness": fac_happiness})
+            final_fac_dict.update({fac_name: faction_dict})
 
     # Outputs final system data dictionary to file
     fpath = r"data/"
@@ -70,4 +92,12 @@ def parse_system_data(json_dict):
             output.write(f"{key}: {value}\n")
         output.write("\n")
         for key, value in sor_fac_inf_dict.items():
-            output.write(f"{key}: {value}\n")
+            output.write(f"{key}: {value:.2f}\n")
+        output.write("\n")
+        for key, value in final_fac_dict.items():
+            output.write(f"{key}\n")
+            for y in value:
+                output.write(f"{y}: ")
+                val = value[y]
+                output.write(f"{val}\n")
+            output.write("\n")
