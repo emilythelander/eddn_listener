@@ -3,7 +3,7 @@ import parse_system_data as psd
 
 # import system_list as syslist
 
-system_list = ["Yoru"]
+system_list = ["Miquit"]
 
 for system in system_list:
     try:

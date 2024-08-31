@@ -39,15 +39,40 @@ def parse_system_data(json_dict):
     final_dict.update({"Allegiance": allegiance})
     government = ((json_dict["docs"][0]["government"])[12:-1]).capitalize()
     final_dict.update({"Government": government})
-    final_dict.update({"Population": json_dict["docs"][0]["population"]})
-    prim_eco = ((json_dict["docs"][0]["primary_economy"])[9:-1]).capitalize()
+    final_dict.update({"Population": "{:,}".format(json_dict["docs"][0]["population"])})
+    prim_eco = h.get_economy(json_dict["docs"][0]["primary_economy"])
     final_dict.update({"Primary Economy": prim_eco})
-    sec_eco = ((json_dict["docs"][0]["secondary_economy"])[9:-1]).capitalize()
+    sec_eco = h.get_economy(json_dict["docs"][0]["secondary_economy"])
     final_dict.update({"Secondary Economy": sec_eco})
     security = ((json_dict["docs"][0]["security"])[17:-1]).capitalize()
     final_dict.update({"Security": security})
     state = (json_dict["docs"][0]["state"]).capitalize()
     final_dict.update({"System State": state})
+
+    # Get info about conflicts in system
+    final_conflict_dict = {}
+    count = 1
+    for doc in json_dict["docs"]:
+        for conflict in doc["conflicts"]:
+            conflict_dict = {}
+            con_status = conflict.get("status").capitalize()
+            con_type = h.get_conflict_type(conflict.get("type"))
+            fac1_name = conflict["faction1"]["name"]
+            fac1_days_won = conflict["faction1"]["days_won"]
+            fac2_name = conflict["faction2"]["name"]
+            fac2_days_won = conflict["faction2"]["days_won"]
+            conflict_dict.update(
+                {
+                    "Status": con_status,
+                    "Type": con_type,
+                    "Faction 1": fac1_name,
+                    "Faction 2": fac2_name,
+                    "Faction 1 Days Won": fac1_days_won,
+                    "Faction 2 Days Won": fac2_days_won,
+                }
+            )
+            final_conflict_dict.update({f"Conflict {count}": conflict_dict})
+            count += 1
 
     # Cycle through system factions, create new dictionary for faction influence data, sort by inf desc
     uns_fac_inf_dict = {}
@@ -132,6 +157,17 @@ def parse_system_data(json_dict):
         output.write("[General System Info]\n")
         for key, value in final_dict.items():
             output.write(f"{key}: {value}\n")
+        output.write("\n\n")
+        output.write("[System Conflict Info]\n")
+        for key, value in final_conflict_dict.items():
+            c_status = value["Status"]
+            c_type = value["Type"]
+            c_f1 = value["Faction 1"]
+            c_f2 = value["Faction 2"]
+            c_f1dw = value["Faction 1 Days Won"]
+            c_f2dw = value["Faction 2 Days Won"]
+            output.write(f"{key}:\n{c_type} ({c_status})\n")
+            output.write(f"{c_f1} [{c_f1dw}] vs. {c_f2} [{c_f2dw}]\n")
         output.write("\n\n")
         output.write("[Faction Influence List]\n")
         for key, value in sor_fac_inf_dict.items():

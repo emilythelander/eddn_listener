@@ -60,3 +60,49 @@ def get_faction_states(state):
             return "Terrorist Attack"
         case _:
             return "None"
+
+
+def get_conflict_type(type):
+    match type:
+        case "war":
+            return "War"
+        case "civilwar":
+            return "Civil War"
+        case "election":
+            return "Election"
+        case _:
+            return "None"
+
+
+def get_economy(econ):
+    match econ:
+        case "$economy_agri;":
+            return "Agriculture"
+        case "$economy_colony;":
+            return "Colony"
+        case "$economy_extraction;":
+            return "Extraction"
+        case "$economy_hightech;":
+            return "High Tech"
+        case "$economy_industrial;":
+            return "Industrial"
+        case "$economy_military;":
+            return "Military"
+        case "$economy_none;":
+            return "None"
+        case "$economy_refinery;":
+            return "Refinery"
+        case "$economy_service;":
+            return "Service"
+        case "$economy_terraforming;":
+            return "Terraforming"
+        case "$economy_tourism;":
+            return "Tourism"
+        case "$economy_repair;":
+            return "Repair"
+        case "$economy_rescue;":
+            return "Rescue"
+        case "$economy_damaged;":
+            return "Damaged"
+        case _:
+            return "None"
