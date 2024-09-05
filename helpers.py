@@ -1,20 +1,20 @@
 def get_faction_happiness(band):
-    if band == "$faction_happinessband1;":
-        parsed_band = "Elated"
-    elif band == "$faction_happinessband2;":
-        parsed_band = "Happy"
-    elif band == "$faction_happinessband3;":
-        parsed_band = "Discontented"
-    elif band == "$faction_happinessband4;":
-        parsed_band = "Unhappy"
-    elif band == "$faction_happinessband5;":
-        parsed_band = "Despondent"
-    else:
-        parsed_band = "None"
-    return parsed_band
+    match band:
+        case "$faction_happinessband1;":
+            return "Elated"
+        case "$faction_happinessband2;":
+            return "Happy"
+        case "$faction_happinessband3;":
+            return "Discontented"
+        case "$faction_happinessband4;":
+            return "Unhappy"
+        case "$faction_happinessband5;":
+            return "Despondent"
+        case _:
+            return "None"
 
 
-def get_faction_states(state):
+def get_state(state):
     match state:
         case "none":
             return "None"
@@ -106,3 +106,121 @@ def get_economy(econ):
             return "Damaged"
         case _:
             return "None"
+
+
+def get_allegiance(power):
+    match power:
+        case "alliance":
+            return "Alliance"
+        case "empire":
+            return "Empire"
+        case "federation":
+            return "Federation"
+        case "independent":
+            return "Independent"
+        case "none":
+            return "None"
+        case "$pirate":
+            return "Pirate"
+        case "pilotsfederation":
+            return "Pilots Federation"
+        case "thargoid":
+            return "Thargoid"
+        case "guardian":
+            return "Guardian"
+        case _:
+            return "None"
+
+
+def get_government(gov):
+    match gov:
+        case "$government_anarchy;":
+            return "Anarchy"
+        case "$government_communism;":
+            return "Communism"
+        case "$government_confederacy;":
+            return "Confederacy"
+        case "$government_cooperative;":
+            return "Cooperative"
+        case "$government_corporate;":
+            return "Corporate"
+        case "$government_democracy;":
+            return "Democracy"
+        case "$government_dictatorship;":
+            return "Dictatorship"
+        case "$government_feudal;":
+            return "Feudal"
+        case "$government_imperial;":
+            return "Imperial"
+        case "$government_none;":
+            return "None"
+        case "$government_patronage;":
+            return "Patronage"
+        case "$government_prisoncolony;":
+            return "Prison Colony"
+        case "$government_theocracy;":
+            return "Theocracy"
+        case "$government_engineer;":
+            return "Workshop"
+        case _:
+            return "None"
+
+
+def get_security(sec):
+    match sec:
+        case "$galaxy_map_info_state_anarchy;":
+            return "Anarchy"
+        case "$galaxy_map_info_state_lawless;":
+            return "Lawless"
+        case "$system_security_high;":
+            return "High"
+        case "$system_security_low;":
+            return "Low"
+        case "$system_security_medium;":
+            return "Medium"
+        case _:
+            return "None"
+
+
+def get_station_type(station):
+    match station:
+        case "coriolis":
+            return "Coriolis Starport"
+        case "coriolis_starport":
+            return "Coriolis Starport"
+        case "bernal":
+            return "Ocellus Starport"
+        case "ocellus starport":
+            return "Ocellus Starport"
+        case "orbis":
+            return "Orbis Starport"
+        case "orbis starport":
+            return "Orbis Starport"
+        case "outpost":
+            return "Outpost"
+        case "civilian outpost":
+            return "Outpost"
+        case "commercial outpost":
+            return "Outpost"
+        case "industrial outpost":
+            return "Outpost"
+        case "military outpost":
+            return "Outpost"
+        case "mining outpost":
+            return "Outpost"
+        case "scientific outpost":
+            return "Outpost"
+        case "surfacestation":
+            return "Planetary Outpost"
+        case "crateroutpost":
+            return "Planetary Outpost"
+        case "planetary port":
+            return "Planetary Port"
+        case "craterport":
+            return "Planetary Port"
+        case "asteroidbase":
+            return "Asteroid Base"
+        case "megaship":
+            return "Megaship"
+        case _:
+            return "None or Other"

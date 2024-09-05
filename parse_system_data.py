@@ -35,18 +35,18 @@ def parse_system_data(json_dict):
     final_dict.update({"Current": current})
 
     # Get other basic system information we'll always want
-    allegiance = (json_dict["docs"][0]["allegiance"]).capitalize()
+    allegiance = h.get_allegiance(json_dict["docs"][0]["allegiance"])
     final_dict.update({"Allegiance": allegiance})
-    government = ((json_dict["docs"][0]["government"])[12:-1]).capitalize()
+    government = h.get_government(json_dict["docs"][0]["government"])
     final_dict.update({"Government": government})
     final_dict.update({"Population": "{:,}".format(json_dict["docs"][0]["population"])})
     prim_eco = h.get_economy(json_dict["docs"][0]["primary_economy"])
     final_dict.update({"Primary Economy": prim_eco})
     sec_eco = h.get_economy(json_dict["docs"][0]["secondary_economy"])
     final_dict.update({"Secondary Economy": sec_eco})
-    security = ((json_dict["docs"][0]["security"])[17:-1]).capitalize()
+    security = h.get_security(json_dict["docs"][0]["security"])
     final_dict.update({"Security": security})
-    state = (json_dict["docs"][0]["state"]).capitalize()
+    state = h.get_state(json_dict["docs"][0]["state"])
     final_dict.update({"System State": state})
 
     # Get info about conflicts in system
@@ -102,10 +102,11 @@ def parse_system_data(json_dict):
             faction_dict.update({"Influence": fac_inf})
             fac_gov = (faction["faction_details"]["government"]).capitalize()
             faction_dict.update({"Government": fac_gov})
-            fac_alleg = (faction["faction_details"]["allegiance"]).capitalize()
+            fac_alleg = h.get_allegiance(faction["faction_details"]["allegiance"])
             faction_dict.update({"Allegiance": fac_alleg})
-            fac_happiness = faction["faction_details"]["faction_presence"]["happiness"]
-            fac_happiness = h.get_faction_happiness(fac_happiness)
+            fac_happiness = h.get_faction_happiness(
+                faction["faction_details"]["faction_presence"]["happiness"]
+            )
             faction_dict.update({"Happiness": fac_happiness})
 
             fac_act_states = faction["faction_details"]["faction_presence"][
@@ -113,7 +114,7 @@ def parse_system_data(json_dict):
             ]
             c_str = ""
             for value in fac_act_states:
-                state_fmt = h.get_faction_states(value["state"])
+                state_fmt = h.get_state(value["state"])
                 c_str = c_str + f"{state_fmt}, "
             if c_str == "":
                 c_str = "None"
@@ -127,7 +128,7 @@ def parse_system_data(json_dict):
             ]
             c_str = ""
             for value in fac_pen_states:
-                state_fmt = h.get_faction_states(value["state"])
+                state_fmt = h.get_state(value["state"])
                 c_str = c_str + f"{state_fmt}, "
             if c_str == "":
                 c_str = "None"
@@ -141,7 +142,7 @@ def parse_system_data(json_dict):
             ]
             c_str = ""
             for value in fac_rec_states:
-                state_fmt = h.get_faction_states(value["state"])
+                state_fmt = h.get_state(value["state"])
                 c_str = c_str + f"{state_fmt}, "
             if c_str == "":
                 c_str = "None"
