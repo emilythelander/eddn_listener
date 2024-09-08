@@ -1,6 +1,7 @@
 import get_json_data as gjd
 import time_functions as tf
 import helpers as h
+import pandas as pd
 
 
 # Takes dictionary as input
@@ -81,6 +82,7 @@ def parse_system_data(json_dict):
             fac_name = faction.get("name")
             fac_inf = faction["faction_details"]["faction_presence"]["influence"]
             fac_inf = fac_inf * 100
+            fac_inf = round(fac_inf, 2)
             uns_fac_inf_dict.update({fac_name: fac_inf})
 
     sor_fac_inf_dict = sorted(
@@ -152,6 +154,7 @@ def parse_system_data(json_dict):
             final_fac_dict.update({fac_name: faction_dict})
 
     # Outputs final system data dictionary to file
+
     fpath = r"data/"
     fname = fpath + sys_name + "_" + tf.time_fname_output()
     with open(fname, "w") as output:
@@ -171,8 +174,8 @@ def parse_system_data(json_dict):
             output.write(f"{c_f1} [{c_f1dw}] vs. {c_f2} [{c_f2dw}]\n")
         output.write("\n\n")
         output.write("[Faction Influence List]\n")
-        for key, value in sor_fac_inf_dict.items():
-            output.write(f"{key}: {value:.2f}\n")
+        inf_df = pd.DataFrame(sor_fac_inf_dict.items())
+        output.write(inf_df.to_string(header=False, index=False))
         output.write("\n\n")
         output.write("[Detailed Faction Information]\n")
         for key, value in final_fac_dict.items():
