@@ -76,20 +76,14 @@ def parse_system_data(json_dict):
             count += 1
 
     # Cycle through system factions, create new dictionary for faction influence data, sort by inf desc
-    uns_fac_inf_dict = {}
+    fac_inf_dict = {}
     for doc in json_dict["docs"]:
         for faction in doc["factions"]:
             fac_name = faction.get("name")
             fac_inf = faction["faction_details"]["faction_presence"]["influence"]
             fac_inf = fac_inf * 100
             fac_inf = round(fac_inf, 2)
-            uns_fac_inf_dict.update({fac_name: fac_inf})
-
-    sor_fac_inf_dict = sorted(
-        uns_fac_inf_dict.items(), key=lambda x: x[1], reverse=True
-    )
-
-    sor_fac_inf_dict = dict(sor_fac_inf_dict)
+            fac_inf_dict.update({fac_name: fac_inf})
 
     # Get other faction info
     final_fac_dict = {}
@@ -161,7 +155,9 @@ def parse_system_data(json_dict):
     with open(fname, "w") as output:
         output.write("[General System Info]\n")
         gs_df = pd.DataFrame(final_dict.items())
-        output.write(gs_df.to_string(header=False, index=False))
+        output.write(
+            gs_df.to_string(header=False, index=False, justify="left", col_space=20)
+        )
         output.write("\n\n")
 
         output.write("[System Conflict Info]\n")
@@ -180,8 +176,11 @@ def parse_system_data(json_dict):
         output.write("\n\n")
 
         output.write("[Faction Influence List]\n")
-        inf_df = pd.DataFrame(sor_fac_inf_dict.items())
-        output.write(inf_df.to_string(header=False, index=False))
+        inf_df = pd.DataFrame.from_dict(
+            fac_inf_dict, orient="index", columns=["Influence"]
+        )
+        inf_df = inf_df.sort_values(by="Influence", ascending=False)
+        output.write(inf_df.to_string(header=False))
         output.write("\n\n")
 
         output.write("[Detailed Faction Information]\n")
