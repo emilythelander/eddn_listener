@@ -157,26 +157,33 @@ def parse_system_data(json_dict):
 
     fpath = r"data/"
     fname = fpath + sys_name + "_" + tf.time_fname_output()
+
     with open(fname, "w") as output:
         output.write("[General System Info]\n")
-        for key, value in final_dict.items():
-            output.write(f"{key}: {value}\n")
+        gs_df = pd.DataFrame(final_dict.items())
+        output.write(gs_df.to_string(header=False, index=False))
         output.write("\n\n")
+
         output.write("[System Conflict Info]\n")
-        for key, value in final_conflict_dict.items():
-            c_status = value["Status"]
-            c_type = value["Type"]
-            c_f1 = value["Faction 1"]
-            c_f2 = value["Faction 2"]
-            c_f1dw = value["Faction 1 Days Won"]
-            c_f2dw = value["Faction 2 Days Won"]
-            output.write(f"{key}:\n{c_type} ({c_status})\n")
-            output.write(f"{c_f1} [{c_f1dw}] vs. {c_f2} [{c_f2dw}]\n")
+        if final_conflict_dict:
+            for key, value in final_conflict_dict.items():
+                c_status = value["Status"]
+                c_type = value["Type"]
+                c_f1 = value["Faction 1"]
+                c_f2 = value["Faction 2"]
+                c_f1dw = value["Faction 1 Days Won"]
+                c_f2dw = value["Faction 2 Days Won"]
+                output.write(f"{key}:\n{c_type} ({c_status})\n")
+                output.write(f"{c_f1} [{c_f1dw}] vs. {c_f2} [{c_f2dw}]\n")
+        else:
+            output.write("No current conflicts in system\n")
         output.write("\n\n")
+
         output.write("[Faction Influence List]\n")
         inf_df = pd.DataFrame(sor_fac_inf_dict.items())
         output.write(inf_df.to_string(header=False, index=False))
         output.write("\n\n")
+
         output.write("[Detailed Faction Information]\n")
         for key, value in final_fac_dict.items():
             output.write(f"{key}\n")
@@ -186,3 +193,7 @@ def parse_system_data(json_dict):
                 output.write(f"{val}\n")
             output.write("\n")
         output.write("\n\n")
+
+        output.write("Detailed Faction Tests\n")
+        df_df = pd.DataFrame(final_fac_dict.items())
+        output.write(df_df.to_string(header=False, index=False))
