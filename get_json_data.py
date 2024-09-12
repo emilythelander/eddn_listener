@@ -9,6 +9,7 @@ def get_system_data(sys_name):
         "https://elitebgs.app/api/ebgs/v5/systems?name="
         + sys_name
         + "&factionDetails=true"
+        + "&factionHistory=true"
     )
     res = requests.get(url)
 

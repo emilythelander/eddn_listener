@@ -33,6 +33,8 @@ def parse_system_data(json_dict):
     # Compare update date with last tick to see if the data is current or not
     last_update = tf.convert_tz(json_dict["docs"][0]["updated_at"])
     current = tf.is_current(last_update)
+    last_update = tf.td_to_str(last_update)
+    final_dict.update({"Last Updated": last_update})
     final_dict.update({"Current": current})
 
     # Get other basic system information we'll always want

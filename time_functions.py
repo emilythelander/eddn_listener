@@ -17,7 +17,8 @@ def convert_tz(dt):
 
 # takes input type datetime, returns type string
 def td_to_str(dt):
-    dt_str = datetime.strftime(dt, "%Y-%m-%d %H:%M:%S")
+    dt_str = datetime.strftime(dt, "%Y-%m-%d %H:%M:%S.%fZ")
+    dt_str = dt_str[:-8]
     return dt_str
 
 
